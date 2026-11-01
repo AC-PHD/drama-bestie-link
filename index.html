@@ -1,0 +1,90 @@
+<!doctype html>
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex">
+<title>Drama Bestie</title>
+<style>
+  :root { --bg:#FFFAF3; --ink:#281D36; --muted:#736779; --accent:#A34F6C; --on-accent:#fff; }
+  @media (prefers-color-scheme: dark) {
+    :root { --bg:#211C29; --ink:#F5EDE8; --muted:#C6BACA; --accent:#EBC0CC; --on-accent:#352440; }
+  }
+  * { box-sizing:border-box; }
+  body { margin:0; min-height:100vh; display:grid; place-items:center; padding:24px 16px;
+         background:var(--bg); color:var(--ink); font:17px/1.5 system-ui,sans-serif; text-align:center; }
+  main { max-width:420px; width:100%; }
+  .mark { width:112px; height:112px; border-radius:26px; display:block; margin:0 auto 20px; }
+  h1 { font:500 28px/1.2 Georgia,serif; margin:0 0 8px; overflow-wrap:anywhere; }
+  p { margin:0 0 20px; color:var(--muted); }
+  a.open { display:block; padding:14px 18px; border-radius:14px; background:var(--accent);
+           color:var(--on-accent); font-weight:700; text-decoration:none; }
+  small { display:block; margin-top:16px; color:var(--muted); }
+</style>
+</head>
+<body>
+<main>
+  <svg class="mark" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1024 1024" role="img" aria-labelledby="title desc">
+  <title id="title">Drama Bestie</title>
+  <desc id="desc">A happy cream cat with closed eyes and a heart-shaped nose on a plum and berry background. Every shape is mirrored around the vertical centre.</desc>
+  <defs>
+    <radialGradient id="bg" cx="512" cy="470" r="760" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#A34F6C"/>
+      <stop offset=".55" stop-color="#6E2F5C"/>
+      <stop offset="1" stop-color="#3B2A52"/>
+    </radialGradient>
+    <linearGradient id="fur" x1="512" y1="210" x2="512" y2="800" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#FFFCF7"/>
+      <stop offset="1" stop-color="#F8E7DD"/>
+    </linearGradient>
+  </defs>
+  <rect id="background" width="1024" height="1024" fill="url(#bg)"/>
+  <g id="cat">
+    <path d="M512 802C352 802 232 702 232 566C232 490 250 372 276 262C282 236 312 226 332 244L438 336C462 330 486 327 512 327C538 327 562 330 586 336L692 244C712 226 742 236 748 262C774 372 792 490 792 566C792 702 672 802 512 802Z" fill="url(#fur)"/>
+    <path d="M296 292L300 276C301 270 308 268 312 272L392 342C366 352 342 366 322 384C310 354 301 322 296 292Z" fill="#E9A9BB"/>
+    <path d="M728 292L724 276C723 270 716 268 712 272L632 342C658 352 682 366 702 384C714 354 723 322 728 292Z" fill="#E9A9BB"/>
+    <path d="M336 520C358 480 412 480 434 520" fill="none" stroke="#3B2A52" stroke-width="30" stroke-linecap="round"/>
+    <path d="M590 520C612 480 666 480 688 520" fill="none" stroke="#3B2A52" stroke-width="30" stroke-linecap="round"/>
+    <ellipse cx="318" cy="610" rx="50" ry="30" fill="#F4B9C6"/>
+    <ellipse cx="706" cy="610" rx="50" ry="30" fill="#F4B9C6"/>
+    <path d="M512 640C512 640 462 606 462 572C462 551 478 538 494 538C503 538 509 543 512 549C515 543 521 538 530 538C546 538 562 551 562 572C562 606 512 640 512 640Z" fill="#A34F6C"/>
+  </g>
+</svg>
+
+  <h1 id="title">Drama Bestie</h1>
+  <p id="lead"></p>
+  <a class="open" id="open" href="#"></a>
+  <small id="hint"></small>
+</main>
+<script>
+// Only forwards to the app. Nothing is stored or sent anywhere.
+(function () {
+  var q = new URLSearchParams(location.search);
+  var id = q.get('id') || '';
+  var title = (q.get('t') || '').slice(0, 120);
+  var de = (navigator.language || 'de').toLowerCase().indexOf('de') === 0;
+  var valid = /^tvmaze-\d+$/.test(id);
+  document.documentElement.lang = de ? 'de' : 'en';
+  if (title) document.getElementById('title').textContent = title;
+  document.getElementById('lead').textContent = valid
+    ? (de ? 'Deine Bestie empfiehlt dir dieses Drama.' : 'Your Bestie recommends this drama.')
+    : (de ? 'Dein gemütlicher Ort für asiatische Dramen.' : 'Your cozy home for Asian dramas.');
+  var open = document.getElementById('open');
+  var hint = document.getElementById('hint');
+  if (!valid) { open.style.display = 'none'; return; }
+  document.title = title || 'Drama Bestie';
+  var query = 'id=' + encodeURIComponent(id) + '&t=' + encodeURIComponent(title);
+  var scheme = 'dramabestie://drama?' + query;
+  var android = /android/i.test(navigator.userAgent);
+  var target = android
+    ? 'intent://drama?' + query + '#Intent;scheme=dramabestie;package=com.kdramabestie.kdrama_bestie;S.browser_fallback_url=' +
+      encodeURIComponent(location.href) + ';end'
+    : scheme;
+  open.href = target;
+  open.textContent = de ? 'In Drama Bestie öffnen' : 'Open in Drama Bestie';
+  hint.textContent = de ? 'Dafür muss Drama Bestie installiert sein.' : 'This needs Drama Bestie installed.';
+  location.href = target;
+})();
+</script>
+</body>
+</html>
