@@ -65,7 +65,8 @@
   var de = (navigator.language || 'de').toLowerCase().indexOf('de') === 0;
   var valid = /^tvmaze-\d+$/.test(id);
   document.documentElement.lang = de ? 'de' : 'en';
-  if (title) document.getElementById('heading').textContent = title;
+  // Without a real drama id, the page shows no text taken from the address.
+  if (valid && title) document.getElementById('heading').textContent = title;
   document.getElementById('lead').textContent = valid
     ? (de ? 'Deine Bestie empfiehlt dir dieses Drama.' : 'Your Bestie recommends this drama.')
     : (de ? 'Dein gemütlicher Ort für asiatische Dramen.' : 'Your cozy home for Asian dramas.');
